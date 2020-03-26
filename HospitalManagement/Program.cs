@@ -30,6 +30,7 @@ namespace HospitalManagement
             string drug;
             char addDepartment = 'y';
             var dbContext = new HospitalDbEntities();
+            Console.WriteLine("prince rathore");
             while (loop)
             {
                 Console.WriteLine("1.Add patient");
