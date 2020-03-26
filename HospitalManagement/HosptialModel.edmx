@@ -1,0 +1,601 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HospitalDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Appointments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="DoctorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Doctors">
+          <Key>
+            <PropertyRef Name="DoctorId" />
+          </Key>
+          <Property Name="DoctorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DoctorName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="treatment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContactNumber" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Drugs">
+          <Key>
+            <PropertyRef Name="DrugId" />
+          </Key>
+          <Property Name="DrugId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DrugName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HealthcareAssistants">
+          <Key>
+            <PropertyRef Name="AssistantId" />
+          </Key>
+          <Property Name="AssistantId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssistantName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProfessionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="ContactNumber" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="PatientId" />
+          </Key>
+          <Property Name="PatientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Age" Type="int" Nullable="false" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ContactNumber" Type="bigint" Nullable="false" />
+          <Property Name="Address" Type="varchar(max)" Nullable="false" />
+          <Property Name="DiseaseName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Treatments">
+          <Key>
+            <PropertyRef Name="TreatmentId" />
+          </Key>
+          <Property Name="TreatmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DoctorId" Type="int" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="DrugId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HospitalDb.dbo.vGetPatientDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vGetPatientDetails">
+          <Key>
+            <PropertyRef Name="PatientName" />
+            <PropertyRef Name="Gender" />
+            <PropertyRef Name="Age" />
+            <PropertyRef Name="ContactNumber" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="DoctorName" />
+            <PropertyRef Name="treatment" />
+            <PropertyRef Name="DepartmentName" />
+            <PropertyRef Name="AssistantName" />
+          </Key>
+          <Property Name="PatientName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Age" Type="int" Nullable="false" />
+          <Property Name="ContactNumber" Type="bigint" Nullable="false" />
+          <Property Name="Address" Type="varchar(max)" Nullable="false" />
+          <Property Name="DoctorName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="treatment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssistantName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Doctors__Departm__4BAC3F29">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Doctors">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Healthcar__Depar__5441852A">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="1" />
+          <End Role="HealthcareAssistants" Type="Self.HealthcareAssistants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="HealthcareAssistants">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SeriousPa__Docto__5812160E">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="DoctorId" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SeriousPa__Patie__571DF1D5">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Appointments" Type="Self.Appointments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Appointments">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Treatment__Docto__03F0984C">
+          <End Role="Doctors" Type="Self.Doctors" Multiplicity="1" />
+          <End Role="Treatments" Type="Self.Treatments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctors">
+              <PropertyRef Name="DoctorId" />
+            </Principal>
+            <Dependent Role="Treatments">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Treatment__DrugI__05D8E0BE">
+          <End Role="Drugs" Type="Self.Drugs" Multiplicity="1" />
+          <End Role="Treatments" Type="Self.Treatments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Drugs">
+              <PropertyRef Name="DrugId" />
+            </Principal>
+            <Dependent Role="Treatments">
+              <PropertyRef Name="DrugId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Treatment__Patie__04E4BC85">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Treatments" Type="Self.Treatments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Treatments">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HospitalDbModelStoreContainer">
+          <EntitySet Name="Appointments" EntityType="Self.Appointments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Drugs" EntityType="Self.Drugs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HealthcareAssistants" EntityType="Self.HealthcareAssistants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Treatments" EntityType="Self.Treatments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vGetPatientDetails" EntityType="Self.vGetPatientDetails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vGetPatientDetails].[PatientName] AS [PatientName], 
+    [vGetPatientDetails].[Gender] AS [Gender], 
+    [vGetPatientDetails].[Age] AS [Age], 
+    [vGetPatientDetails].[ContactNumber] AS [ContactNumber], 
+    [vGetPatientDetails].[Address] AS [Address], 
+    [vGetPatientDetails].[DoctorName] AS [DoctorName], 
+    [vGetPatientDetails].[treatment] AS [treatment], 
+    [vGetPatientDetails].[DepartmentName] AS [DepartmentName], 
+    [vGetPatientDetails].[AssistantName] AS [AssistantName]
+    FROM [dbo].[vGetPatientDetails] AS [vGetPatientDetails]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Doctors__Departm__4BAC3F29" Association="Self.FK__Doctors__Departm__4BAC3F29">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Doctors" EntitySet="Doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Healthcar__Depar__5441852A" Association="Self.FK__Healthcar__Depar__5441852A">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="HealthcareAssistants" EntitySet="HealthcareAssistants" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SeriousPa__Docto__5812160E" Association="Self.FK__SeriousPa__Docto__5812160E">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SeriousPa__Patie__571DF1D5" Association="Self.FK__SeriousPa__Patie__571DF1D5">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Appointments" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Treatment__Docto__03F0984C" Association="Self.FK__Treatment__Docto__03F0984C">
+            <End Role="Doctors" EntitySet="Doctors" />
+            <End Role="Treatments" EntitySet="Treatments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Treatment__DrugI__05D8E0BE" Association="Self.FK__Treatment__DrugI__05D8E0BE">
+            <End Role="Drugs" EntitySet="Drugs" />
+            <End Role="Treatments" EntitySet="Treatments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Treatment__Patie__04E4BC85" Association="Self.FK__Treatment__Patie__04E4BC85">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Treatments" EntitySet="Treatments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HospitalDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK__Doctors__Departm__4BAC3F29" FromRole="Departments" ToRole="Doctors" />
+          <NavigationProperty Name="HealthcareAssistants" Relationship="Self.FK__Healthcar__Depar__5441852A" FromRole="Departments" ToRole="HealthcareAssistants" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="DoctorId" />
+          </Key>
+          <Property Name="DoctorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DoctorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="treatment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK__Doctors__Departm__4BAC3F29" FromRole="Doctors" ToRole="Departments" />
+          <NavigationProperty Name="Appointments" Relationship="HospitalDbModel.FK__SeriousPa__Docto__5812160E" FromRole="Doctor" ToRole="Appointment" />
+          <NavigationProperty Name="Treatments" Relationship="HospitalDbModel.FK__Treatment__Docto__03F0984C" FromRole="Doctor" ToRole="Treatment" />
+          <Property Name="ContactNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Drug">
+          <Key>
+            <PropertyRef Name="DrugId" />
+          </Key>
+          <Property Name="DrugId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DrugName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Treatments" Relationship="HospitalDbModel.FK__Treatment__DrugI__05D8E0BE" FromRole="Drug" ToRole="Treatment" />
+        </EntityType>
+        <EntityType Name="HealthcareAssistant">
+          <Key>
+            <PropertyRef Name="AssistantId" />
+          </Key>
+          <Property Name="AssistantId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssistantName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProfessionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK__Healthcar__Depar__5441852A" FromRole="HealthcareAssistants" ToRole="Departments" />
+          <Property Name="ContactNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="PatientId" />
+          </Key>
+          <Property Name="PatientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ContactNumber" Type="Int64" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DiseaseName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Appointments" Relationship="HospitalDbModel.FK__SeriousPa__Patie__571DF1D5" FromRole="Patient" ToRole="Appointment" />
+          <NavigationProperty Name="Treatments" Relationship="HospitalDbModel.FK__Treatment__Patie__04E4BC85" FromRole="Patient" ToRole="Treatment" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK__Doctors__Departm__4BAC3F29">
+          <End Role="Departments" Type="Self.Department" Multiplicity="1" />
+          <End Role="Doctors" Type="Self.Doctor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Doctors">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Healthcar__Depar__5441852A">
+          <End Role="Departments" Type="Self.Department" Multiplicity="1" />
+          <End Role="HealthcareAssistants" Type="Self.HealthcareAssistant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="HealthcareAssistants">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HospitalDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+          <EntitySet Name="Drugs" EntityType="Self.Drug" />
+          <EntitySet Name="HealthcareAssistants" EntityType="Self.HealthcareAssistant" />
+          <EntitySet Name="Patients" EntityType="Self.Patient" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="FK__Doctors__Departm__4BAC3F29" Association="Self.FK__Doctors__Departm__4BAC3F29">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Doctors" EntitySet="Doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Healthcar__Depar__5441852A" Association="Self.FK__Healthcar__Depar__5441852A">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="HealthcareAssistants" EntitySet="HealthcareAssistants" />
+          </AssociationSet>
+          <EntitySet Name="Appointments" EntityType="HospitalDbModel.Appointment" />
+          <AssociationSet Name="FK__SeriousPa__Docto__5812160E" Association="HospitalDbModel.FK__SeriousPa__Docto__5812160E">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="Appointment" EntitySet="Appointments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SeriousPa__Patie__571DF1D5" Association="HospitalDbModel.FK__SeriousPa__Patie__571DF1D5">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Appointment" EntitySet="Appointments" />
+          </AssociationSet>
+          <EntitySet Name="vGetPatientDetails" EntityType="HospitalDbModel.vGetPatientDetail" />
+          <EntitySet Name="Treatments" EntityType="HospitalDbModel.Treatment" />
+          <AssociationSet Name="FK__Treatment__Docto__03F0984C" Association="HospitalDbModel.FK__Treatment__Docto__03F0984C">
+            <End Role="Doctor" EntitySet="Doctors" />
+            <End Role="Treatment" EntitySet="Treatments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Treatment__DrugI__05D8E0BE" Association="HospitalDbModel.FK__Treatment__DrugI__05D8E0BE">
+            <End Role="Drug" EntitySet="Drugs" />
+            <End Role="Treatment" EntitySet="Treatments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Treatment__Patie__04E4BC85" Association="HospitalDbModel.FK__Treatment__Patie__04E4BC85">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="Treatment" EntitySet="Treatments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Appointment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="DoctorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Doctor" Relationship="HospitalDbModel.FK__SeriousPa__Docto__5812160E" FromRole="Appointment" ToRole="Doctor" />
+          <NavigationProperty Name="Patient" Relationship="HospitalDbModel.FK__SeriousPa__Patie__571DF1D5" FromRole="Appointment" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK__SeriousPa__Docto__5812160E">
+          <End Type="HospitalDbModel.Doctor" Role="Doctor" Multiplicity="1" />
+          <End Type="HospitalDbModel.Appointment" Role="Appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="DoctorId" />
+            </Principal>
+            <Dependent Role="Appointment">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SeriousPa__Patie__571DF1D5">
+          <End Type="HospitalDbModel.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="HospitalDbModel.Appointment" Role="Appointment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Appointment">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vGetPatientDetail">
+          <Key>
+            <PropertyRef Name="PatientName" />
+            <PropertyRef Name="Gender" />
+            <PropertyRef Name="Age" />
+            <PropertyRef Name="ContactNumber" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="DoctorName" />
+            <PropertyRef Name="treatment" />
+            <PropertyRef Name="DepartmentName" />
+            <PropertyRef Name="AssistantName" />
+          </Key>
+          <Property Name="PatientName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Age" Type="Int32" Nullable="false" />
+          <Property Name="ContactNumber" Type="Int64" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="DoctorName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="treatment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AssistantName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Treatment">
+          <Key>
+            <PropertyRef Name="TreatmentId" />
+          </Key>
+          <Property Name="TreatmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DoctorId" Type="Int32" Nullable="false" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="DrugId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Doctor" Relationship="HospitalDbModel.FK__Treatment__Docto__03F0984C" FromRole="Treatment" ToRole="Doctor" />
+          <NavigationProperty Name="Drug" Relationship="HospitalDbModel.FK__Treatment__DrugI__05D8E0BE" FromRole="Treatment" ToRole="Drug" />
+          <NavigationProperty Name="Patient" Relationship="HospitalDbModel.FK__Treatment__Patie__04E4BC85" FromRole="Treatment" ToRole="Patient" />
+        </EntityType>
+        <Association Name="FK__Treatment__Docto__03F0984C">
+          <End Type="HospitalDbModel.Doctor" Role="Doctor" Multiplicity="1" />
+          <End Type="HospitalDbModel.Treatment" Role="Treatment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Doctor">
+              <PropertyRef Name="DoctorId" />
+            </Principal>
+            <Dependent Role="Treatment">
+              <PropertyRef Name="DoctorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Treatment__DrugI__05D8E0BE">
+          <End Type="HospitalDbModel.Drug" Role="Drug" Multiplicity="1" />
+          <End Type="HospitalDbModel.Treatment" Role="Treatment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Drug">
+              <PropertyRef Name="DrugId" />
+            </Principal>
+            <Dependent Role="Treatment">
+              <PropertyRef Name="DrugId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Treatment__Patie__04E4BC85">
+          <End Type="HospitalDbModel.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="HospitalDbModel.Treatment" Role="Treatment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="Treatment">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HospitalDbModelStoreContainer" CdmEntityContainer="HospitalDbEntities">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="HospitalDbModel.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="HospitalDbModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctors">
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="treatment" ColumnName="treatment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drugs">
+            <EntityTypeMapping TypeName="HospitalDbModel.Drug">
+              <MappingFragment StoreEntitySet="Drugs">
+                <ScalarProperty Name="DrugId" ColumnName="DrugId" />
+                <ScalarProperty Name="DrugName" ColumnName="DrugName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HealthcareAssistants">
+            <EntityTypeMapping TypeName="HospitalDbModel.HealthcareAssistant">
+              <MappingFragment StoreEntitySet="HealthcareAssistants">
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="AssistantId" ColumnName="AssistantId" />
+                <ScalarProperty Name="AssistantName" ColumnName="AssistantName" />
+                <ScalarProperty Name="ProfessionName" ColumnName="ProfessionName" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="HospitalDbModel.Patient">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DiseaseName" ColumnName="DiseaseName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="HospitalDbModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Appointments">
+            <EntityTypeMapping TypeName="HospitalDbModel.Appointment">
+              <MappingFragment StoreEntitySet="Appointments">
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vGetPatientDetails">
+            <EntityTypeMapping TypeName="HospitalDbModel.vGetPatientDetail">
+              <MappingFragment StoreEntitySet="vGetPatientDetails">
+                <ScalarProperty Name="AssistantName" ColumnName="AssistantName" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="treatment" ColumnName="treatment" />
+                <ScalarProperty Name="DoctorName" ColumnName="DoctorName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Treatments">
+            <EntityTypeMapping TypeName="HospitalDbModel.Treatment">
+              <MappingFragment StoreEntitySet="Treatments">
+                <ScalarProperty Name="DrugId" ColumnName="DrugId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="DoctorId" ColumnName="DoctorId" />
+                <ScalarProperty Name="TreatmentId" ColumnName="TreatmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

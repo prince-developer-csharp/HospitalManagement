@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c82758554bec40b1950f8efb904f9ce0" Name="Diagram1">
+        <EntityTypeShape EntityType="HospitalDbModel.Department" Width="1.5" PointX="1.5" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="HospitalDbModel.Doctor" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HospitalDbModel.Drug" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HospitalDbModel.HealthcareAssistant" Width="1.5" PointX="3.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HospitalDbModel.Patient" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HospitalDbModel.sysdiagram" Width="1.5" PointX="5.75" PointY="2.125" IsExpanded="true" />
+        <AssociationConnector Association="HospitalDbModel.FK__Doctors__Departm__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="HospitalDbModel.FK__Healthcar__Depar__5441852A" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HospitalDbModel.Appointment" Width="1.5" PointX="3" PointY="6.75" />
+        <AssociationConnector Association="HospitalDbModel.FK__SeriousPa__Docto__5812160E" />
+        <AssociationConnector Association="HospitalDbModel.FK__SeriousPa__Patie__571DF1D5" />
+        <EntityTypeShape EntityType="HospitalDbModel.vGetPatientDetail" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="HospitalDbModel.Treatment" Width="1.5" PointX="3" PointY="9.625" />
+        <AssociationConnector Association="HospitalDbModel.FK__Treatment__Docto__03F0984C" />
+        <AssociationConnector Association="HospitalDbModel.FK__Treatment__DrugI__05D8E0BE" />
+        <AssociationConnector Association="HospitalDbModel.FK__Treatment__Patie__04E4BC85" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
