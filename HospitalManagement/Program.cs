@@ -58,94 +58,9 @@ namespace HospitalManagement
                         address = Console.ReadLine();
                         Console.WriteLine("Enter the disease : ");
                         disease = Console.ReadLine();
-     
-                        var patient = new Patient()
-                        {
-                            PatientName = name,
-                            Age = age,
-                            Gender = gender,
-                            ContactNumber = number,
-                            Address = address,
-                            DiseaseName = disease
-                        };
-
-                        var checkPatient = dbContext.Patients.Where(t => t.PatientName == name && t.ContactNumber == number).FirstOrDefault();
-                        if(checkPatient == null)
-                        {
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("patient already inserted");
-                            return;
-                        }
-                        try
-                        {
-                            dbContext.Patients.Add(patient);
-                            dbContext.SaveChanges();
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-
-                        //find patient Id 
-                        var findPatient = dbContext.Patients.Where(t => t.PatientName == name).FirstOrDefault();
-                        if(findPatient == null)
-                        {
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            patientId = findPatient.PatientId;
-                        }
-
-                        //find all doctor for disease
-                        var findDoctor = dbContext.Doctors.ToList().Where(t => t.treatment == disease);
-                        Console.WriteLine(findDoctor);
-                        var count = findDoctor.Count();
-                        Console.WriteLine(count);
-                        if (count == 0)
-                        {
-                            Console.WriteLine("Treatment is not available for disease");
-                            //delete patient if treatment is not available
-                            try
-                            {
-                                dbContext.Patients.Remove(dbContext.Patients.Single(t => t.PatientId == patientId));
-                                dbContext.SaveChanges();
-                            }
-                            catch(Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                        }
-                        else
-                        {
-                            foreach(var doctor in findDoctor)
-                            {
-                                Console.WriteLine(doctor.DoctorId + ". " + doctor.DoctorName);
-                            }
-
-                            Console.WriteLine("Enter your doctorID : ");
-                            int doctorId = Convert.ToInt32(Console.ReadLine());
-
-                            var assignDoctor = new Appointment()
-                            {
-                                PatientId = patientId,
-                                DoctorId = doctorId
-                            };
-
-                            try
-                            {
-                                dbContext.Appointments.Add(assignDoctor);
-                                dbContext.SaveChanges();
-                            }
-
-                            catch(Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                        }
+                        //method for add patient
+                        addPatient(name, age, gender, number, address, disease);    
+                       
                         break;
 
                     case 2:
@@ -153,16 +68,8 @@ namespace HospitalManagement
                         name = Console.ReadLine();
                         Console.WriteLine("Enter the Contact Number");
                         number = Convert.ToInt64(Console.ReadLine());
-                        var patientDetails = dbContext.vGetPatientDetails.Where(t => t.PatientName == name && t.ContactNumber == number).FirstOrDefault();
-                        Console.WriteLine("Patient Name : " + patientDetails.PatientName);
-                        Console.WriteLine("Patient Gender : " + patientDetails.Gender);
-                        Console.WriteLine("Patient Age : " + patientDetails.Age);
-                        Console.WriteLine("Patient Number : " + patientDetails.ContactNumber);
-                        Console.WriteLine("Patient Address : " + patientDetails.Address);
-                        Console.WriteLine("Doctor Name : " + patientDetails.DoctorName);
-                        Console.WriteLine("Treatment: " + patientDetails.treatment);
-                        Console.WriteLine("Department Name : " + patientDetails.DepartmentName);
-                        Console.WriteLine("Assistant Name : " + patientDetails.AssistantName);
+                        ShowPatientDetails(name, number);
+                        
                         break;
 
                     case 3:
@@ -173,31 +80,10 @@ namespace HospitalManagement
 
                             Console.WriteLine("Enter the department name: ");
                             departmentName = Console.ReadLine();
-                            var department = new Department()
-                            {
-                                DepartmentName = departmentName
-                            };
-
-                            //find department exist or not
-                            var checkDepartment = dbContext.Departments.Where(t => t.DepartmentName == departmentName).FirstOrDefault();
-
-                            if (checkDepartment == null)
-                            {
-                                try
-                                {
-                                    dbContext.Departments.Add(department);
-                                    dbContext.SaveChanges();
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("department is already here");
-                            }
-                            Console.WriteLine("Do You wanna add department : ");
+                            //method for add department
+                            Console.WriteLine("prince rathore");
+                            AddDepartment(departmentName);                           
+                            Console.WriteLine("Do You wanna add department y/n : ");
                             addDepartment = Convert.ToChar(Console.ReadLine());
                         }
                        
@@ -222,37 +108,8 @@ namespace HospitalManagement
                             treatment = Console.ReadLine();
                             Console.WriteLine("Enter the doctor mobile Number : ");
                             mobileNumber = Console.ReadLine();
-
-                            var doctor = new Doctor()
-                            {
-                                DoctorName = doctorName,
-                                DepartmentId = departmentId,
-                                treatment = treatment,
-                                ContactNumber = mobileNumber
-                            };
-
-                            //check doctor is exist or not with the help of mobile number
-                            var checkDoctor = dbContext.Doctors.Where(t => t.ContactNumber == mobileNumber).FirstOrDefault();
-                            if (checkDoctor == null)
-                            {
-                                try
-                                {
-                                    dbContext.Doctors.Add(doctor);
-                                    dbContext.SaveChanges();
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-
-                                Console.WriteLine("Doctor inserted successfully");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Doctor already inserted");
-                            }
-                            
-
+                            //method for add doctor
+                            AddDoctor(departmentId, doctorName, treatment, mobileNumber);
                             Console.WriteLine("Do you want to add doctor y/n");
                             addDoctor = Convert.ToChar(Console.ReadLine());
                         }
@@ -277,37 +134,8 @@ namespace HospitalManagement
                             professionName = Console.ReadLine();
                             Console.WriteLine("Enter the doctor mobile Number : ");
                             mobileNumber = Console.ReadLine();
-                            var assistant = new HealthcareAssistant()
-                            {
-                                AssistantName = assistantName,
-                                ProfessionName = professionName,
-                                DepartmentId = departmentId,
-                                ContactNumber = mobileNumber
-                            };
-
-                            //check assistant is already exist or not with the help of mobile number
-
-                            var checkAssistant = dbContext.HealthcareAssistants.Where(t => t.ContactNumber == mobileNumber).FirstOrDefault();
-                            if(checkAssistant == null)
-                            {
-                                try
-                                {
-                                    dbContext.HealthcareAssistants.Add(assistant);
-                                    dbContext.SaveChanges();
-                                }
-
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-
-                                Console.WriteLine("Assistant inserted successfully");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Assitant already inserted");
-                            }
-
+                            //method for add assistant
+                            AddAssistant(departmentId, assistantName, professionName, mobileNumber);                            
                             Console.WriteLine("Do you want to add assistant y/n");
                             addAsistant = Convert.ToChar(Console.ReadLine());
                         }
@@ -317,64 +145,22 @@ namespace HospitalManagement
                     case 4:
                         Console.WriteLine("Enter the drug name: ");
                         drug = Console.ReadLine();
-                        var drugs = new Drug()
-                        {
-                            DrugName = drug
-                        };
-
-                        //check drug is exist or not with the help of drug name
-                        var checkDrug = dbContext.Drugs.Where(t => t.DrugName == drug).FirstOrDefault();
-                        if(checkDrug == null)
-                        {
-                            try
-                            {
-                                dbContext.Drugs.Add(drugs);
-                                dbContext.SaveChanges();
-                            }catch(Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Drug already inserted");
-                        }
+                        AddDrug(drug);
+                        
                         break;
 
                     case 5:
                         Console.WriteLine("Enter the drug name: ");
-                        drug = Console.ReadLine();                  
-
-                        //check drug found or not
-                        var foundDrug = dbContext.Drugs.Where(t => t.DrugName == drug).FirstOrDefault();
-                        if(foundDrug == null)
-                        {
-                            Console.WriteLine("medicine is not found");
-                        }
-                        else
-                        {
-                            dbContext.Drugs.Remove(dbContext.Drugs.Single(t => t.DrugName == drug));
-                            dbContext.SaveChanges();
-                            Console.WriteLine("medicine successfully deleted");
-                        }
+                        drug = Console.ReadLine();
+                        RemoveDrug(drug);               
                         break;
 
                     case 6:
-                        Console.WriteLine("Department list");
-                        var departmentList = dbContext.Departments;
-                        foreach(var departments in departmentList)
-                        {
-                            Console.WriteLine("Department name : " + departments.DepartmentName);
-                        }
+                        ShowDepartment();                     
                         break;
 
                     case 7:
-                        Console.WriteLine("Doctor list");
-                        var doctorList = dbContext.Doctors;
-                        foreach(var doctor in doctorList)
-                        {
-                            Console.WriteLine("Doctor name : " + doctor.DoctorName);
-                        }
+                        showDoctor();                        
                         break;
                        
                     case 8:
@@ -382,6 +168,278 @@ namespace HospitalManagement
                         break;
 
                 }
+            }
+        }
+
+        private static void ShowPatientDetails(string name, long number)
+        {
+            var dbContext = new HospitalDbEntities();
+            var patientDetails = dbContext.vGetPatientDetails.Where(t => t.PatientName == name && t.ContactNumber == number).FirstOrDefault();
+            Console.WriteLine("Patient Name : " + patientDetails.PatientName);
+            Console.WriteLine("Patient Gender : " + patientDetails.Gender);
+            Console.WriteLine("Patient Age : " + patientDetails.Age);
+            Console.WriteLine("Patient Number : " + patientDetails.ContactNumber);
+            Console.WriteLine("Patient Address : " + patientDetails.Address);
+            Console.WriteLine("Doctor Name : " + patientDetails.DoctorName);
+            Console.WriteLine("Treatment: " + patientDetails.treatment);
+            Console.WriteLine("Department Name : " + patientDetails.DepartmentName);
+            Console.WriteLine("Assistant Name : " + patientDetails.AssistantName);
+        }
+
+        private static void showDoctor()
+        {
+            var dbContext = new HospitalDbEntities();
+            Console.WriteLine("Doctor list");
+            var doctorList = dbContext.Doctors;
+            foreach (var doctor in doctorList)
+            {
+                Console.WriteLine("Doctor name : " + doctor.DoctorName);
+            }
+        }
+
+        private static void ShowDepartment()
+        {
+            var dbContext = new HospitalDbEntities();
+            Console.WriteLine("Department list");
+            var departmentList = dbContext.Departments;
+            foreach (var departments in departmentList)
+            {
+                Console.WriteLine("Department name : " + departments.DepartmentName);
+            }
+        }
+
+        private static void RemoveDrug(string drug)
+        {
+            var dbContext = new HospitalDbEntities();
+            //check drug found or not
+            var foundDrug = dbContext.Drugs.Where(t => t.DrugName == drug).FirstOrDefault();
+            if (foundDrug == null)
+            {
+                Console.WriteLine("medicine is not found");
+            }
+            else
+            {
+                dbContext.Drugs.Remove(dbContext.Drugs.Single(t => t.DrugName == drug));
+                dbContext.SaveChanges();
+                Console.WriteLine("medicine successfully deleted");
+            }
+        }
+
+        private static void AddDrug(string drug)
+        {
+            var dbContext = new HospitalDbEntities();
+            var drugs = new Drug()
+            {
+                DrugName = drug
+            };
+
+            //check drug is exist or not with the help of drug name
+            var checkDrug = dbContext.Drugs.Where(t => t.DrugName == drug).FirstOrDefault();
+            if (checkDrug == null)
+            {
+                try
+                {
+                    dbContext.Drugs.Add(drugs);
+                    dbContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Drug already inserted");
+            }
+        }
+
+        private static void AddAssistant(int departmentId, string assistantName, string professionName, string mobileNumber)
+        {
+            var dbContext = new HospitalDbEntities();
+            var assistant = new HealthcareAssistant()
+            {
+                AssistantName = assistantName,
+                ProfessionName = professionName,
+                DepartmentId = departmentId,
+                ContactNumber = mobileNumber
+            };
+
+            //check assistant is already exist or not with the help of mobile number
+
+            var checkAssistant = dbContext.HealthcareAssistants.Where(t => t.ContactNumber == mobileNumber).FirstOrDefault();
+            if (checkAssistant == null)
+            {
+                try
+                {
+                    dbContext.HealthcareAssistants.Add(assistant);
+                    dbContext.SaveChanges();
+                }
+
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                Console.WriteLine("Assistant inserted successfully");
+            }
+            else
+            {
+                Console.WriteLine("Assitant already inserted");
+            }
+        }
+
+        private static void AddDoctor(int departmentId, string doctorName, string treatment, string mobileNumber)
+        {
+            var dbContext = new HospitalDbEntities();
+            var doctor = new Doctor()
+            {
+                DoctorName = doctorName,
+                DepartmentId = departmentId,
+                treatment = treatment,
+                ContactNumber = mobileNumber
+            };
+
+            //check doctor is exist or not with the help of mobile number
+            var checkDoctor = dbContext.Doctors.Where(t => t.ContactNumber == mobileNumber).FirstOrDefault();
+            if (checkDoctor == null)
+            {
+                try
+                {
+                    dbContext.Doctors.Add(doctor);
+                    dbContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                Console.WriteLine("Doctor inserted successfully");
+            }
+            else
+            {
+                Console.WriteLine("Doctor already inserted");
+            }
+        }
+
+        private static void addPatient(string name, int age, string gender, long number, string address, string disease)
+        {
+            int patientId = 0;
+            var dbContext = new HospitalDbEntities();
+            var patient = new Patient()
+            {
+                PatientName = name,
+                Age = age,
+                Gender = gender,
+                ContactNumber = number,
+                Address = address,
+                DiseaseName = disease
+            };
+
+            var checkPatient = dbContext.Patients.Where(t => t.PatientName == name && t.ContactNumber == number).FirstOrDefault();
+            if (checkPatient == null)
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("patient already inserted");
+                return;
+            }
+            try
+            {
+                dbContext.Patients.Add(patient);
+                dbContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            //find patient Id 
+            var findPatient = dbContext.Patients.Where(t => t.PatientName == name).FirstOrDefault();
+            if (findPatient == null)
+            {
+                Console.WriteLine("");
+            }
+            else
+            {
+                patientId = findPatient.PatientId;
+            }
+
+            //find all doctor for disease
+            var findDoctor = dbContext.Doctors.ToList().Where(t => t.treatment == disease);
+            Console.WriteLine(findDoctor);
+            var count = findDoctor.Count();
+            Console.WriteLine(count);
+            if (count == 0)
+            {
+                Console.WriteLine("Treatment is not available for disease");
+                //delete patient if treatment is not available
+                try
+                {
+                    dbContext.Patients.Remove(dbContext.Patients.Single(t => t.PatientId == patientId));
+                    dbContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            else
+            {
+                foreach (var doctor in findDoctor)
+                {
+                    Console.WriteLine(doctor.DoctorId + ". " + doctor.DoctorName);
+                }
+
+                Console.WriteLine("Enter your doctorID : ");
+                int doctorId = Convert.ToInt32(Console.ReadLine());
+
+                var assignDoctor = new Appointment()
+                {
+                    PatientId = patientId,
+                    DoctorId = doctorId
+                };
+
+                try
+                {
+                    dbContext.Appointments.Add(assignDoctor);
+                    dbContext.SaveChanges();
+                }
+
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+
+        private static void AddDepartment(string departmentName)
+        {
+            var dbContext = new HospitalDbEntities();
+            var department = new Department()
+            {
+                DepartmentName = departmentName
+            };
+
+            //find department exist or not
+            var checkDepartment = dbContext.Departments.Where(t => t.DepartmentName == departmentName).FirstOrDefault();
+
+            if (checkDepartment == null)
+            {
+                try
+                {
+                    dbContext.Departments.Add(department);
+                    dbContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            else
+            {
+                Console.WriteLine("department is already here");
             }
         }
     }
